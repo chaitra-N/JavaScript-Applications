@@ -10,5 +10,6 @@ btn.addEventListener("click", function () {
 });
 
 function getRandonNumber() {
+  //Math.floor is used to round down to the closest integer.
   return Math.floor(Math.random() * colors.length);
 }
