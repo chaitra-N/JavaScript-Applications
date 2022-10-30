@@ -71,14 +71,78 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id: 10,
+    title: "steak dinner",
+    category: "dinner",
+    price: 16.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
-const sectioncenter = document.querySelector("section-center");
 
-//show person based on item
-function displayMenuItem() {}
+const sectionCenter = document.querySelector(".section-center");
+const container = document.querySelector(".btn-container");
 
 window.addEventListener("DOMContentLoaded", function () {
-  let displayMenuItem = menu.map(function (item) {
-    return item;
-  });
+  displayMenuItem(menu);
+  displayFilterBtns();
 });
+
+function displayMenuItem(menuIteams) {
+  let displayMenu = menuIteams.map(function (item) {
+    return `<article class="menu-item">
+          <img src=${item.img} class="photo" alt=${item.title} />
+          <div class="item-info">
+            <header>
+              <h4>${item.title}</h4>
+              <h4 class="price">$${item.price}</h4>
+            </header>
+            <p class="item-text">
+              ${item.desc}
+            </p>
+          </div> 
+        </article>`;
+  });
+  displayMenu = displayMenu.join("");
+  sectionCenter.innerHTML = displayMenu;
+}
+
+function displayFilterBtns() {
+  // selecting unique categories and adding it into a new array
+  const categories = menu.reduce(
+    function (values, item) {
+      if (!values.includes(item.category)) {
+        values.push(item.category);
+      }
+      return values;
+    },
+    ["all"]
+  );
+  //adding html to the categories
+  const categoryBtns = categories
+    .map(function (itemCategory) {
+      return `<button class="filter-btn" type="button" data-id=${itemCategory}>
+    ${itemCategory}
+    </button>`;
+    })
+    .join(""); //displaying the category buttons
+  container.innerHTML = categoryBtns;
+  const filterBtns = document.querySelectorAll(".filter-btn");
+
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      const category = e.currentTarget.dataset.id;
+      const menuCategory = menu.filter(function (menuItem) {
+        if (menuItem.category === category) {
+          return menuItem;
+        }
+      });
+      if (category === "all") {
+        displayMenuItem(menu);
+      } else {
+        displayMenuItem(menuCategory);
+      }
+    });
+  });
+}
